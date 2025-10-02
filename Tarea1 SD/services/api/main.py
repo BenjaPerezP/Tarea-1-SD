@@ -7,7 +7,6 @@ import redis
 import psycopg2
 import psycopg2.extras
 
-# ========= Config =========
 PGHOST = os.getenv("PGHOST", "db")
 PGPORT = int(os.getenv("PGPORT", "5432"))
 PGUSER = os.getenv("PGUSER", "sd")
@@ -24,7 +23,6 @@ GEN_MODEL = os.getenv("GEN_MODEL", "llama3.2:3b")
 EVAL_MODEL = os.getenv("EVAL_MODEL", "llama3.2:1b")
 NUM_THREAD = int(os.getenv("NUM_THREAD", "2"))
 
-# ========= Helpers =========
 def qhash(s: str) -> str:
     return hashlib.sha256(s.strip().lower().encode("utf-8")).hexdigest()
 
@@ -119,7 +117,6 @@ def bump_counter(cur, qh: str):
         ON CONFLICT (question_hash) DO UPDATE SET times_asked = question_counter.times_asked + 1
     """, (qh,))
 
-# ========= FastAPI =========
 app = FastAPI()
 
 class QueryIn(BaseModel):
