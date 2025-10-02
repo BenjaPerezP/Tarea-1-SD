@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os, json, time, sys
 from typing import Optional
 import psycopg2
@@ -7,7 +5,7 @@ import psycopg2.extras
 
 STORAGE = os.getenv("STORAGE_JSONL", "/data/storage.jsonl")
 
-PGHOST = os.getenv("PGHOST", "db")       # dentro de docker-compose usamos el nombre del servicio
+PGHOST = os.getenv("PGHOST", "db")       
 PGPORT = int(os.getenv("PGPORT", "5432"))
 PGUSER = os.getenv("PGUSER", "sd")
 PGPASSWORD = os.getenv("PGPASSWORD", "sdpass")
@@ -15,7 +13,7 @@ PGDATABASE = os.getenv("PGDATABASE", "sd")
 
 BATCH_SIZE = int(os.getenv("BATCH_SIZE", "200"))
 SLEEP_SECS = float(os.getenv("SLEEP_SECS", "1.0"))
-FROM_START = os.getenv("INGEST_FROM_START", "1") == "1"  # 1 = lee desde el inicio
+FROM_START = os.getenv("INGEST_FROM_START", "1") == "1"  
 
 def connect():
     return psycopg2.connect(
@@ -41,7 +39,7 @@ def log_event(cur, rec):
     hit = (rec.get("type") == "hit")
     score = rec.get("score")
     ans = rec.get("llm_answer")
-    ts = rec.get("ts")  # ISO 8601; Postgres lo puede parsear directo a timestamptz
+    ts = rec.get("ts")  
 
     if ts is None:
         cur.execute("""
