@@ -1,41 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-sd_pipeline_jsonl.py — Monolítico con:
- - Filtro del CSV (para cubrir 15.000 consultas)
- - Generador de tráfico (Poisson/Lognormal)
- - Caché LRU en memoria + LOG de caché en JSONL (stats periódicas)
- - Almacenamiento en JSONL (eventos HIT/MISS y datos relevantes)
- - Cliente Ollama (CPU-only OK)
- - Métrica de calidad por RÚBRICA (1–10) usando el LLM como juez:
-     1) Exactitud (40%)
-     2) Integridad (25%)
-     3) Claridad (20%)
-     4) Concisión (10%)
-     5) Utilidad (5%)
-   Se guarda {"score": <int 1..10>} en cada MISS.
-
-Requisitos:
-  pip install pandas requests
-
-Ejemplos:
-  1) Filtrar CSV:
-     python sd_pipeline_jsonl.py \
-       --input test.csv --output-subset test_subset.csv \
-       --target 15000 --per-row 3 --sample stratified
-
-  2) Ejecutar tráfico (con juez 1b y generador 3b):
-     ollama pull llama3.2:3b
-     ollama pull llama3.2:1b
-     python sd_pipeline_jsonl.py --run \
-       --csv test_subset.csv \
-       --target 15000 \
-       --distribution poisson --rate 1 --sleep \
-       --cache-jsonl cache.jsonl --storage-jsonl storage.jsonl \
-       --model llama3.2:3b --eval-model llama3.2:1b \
-       --threads 2 --jsonl-stats-every 200 \
-       --timeout-gen 300 --timeout-eval 600
-"""
 
 import argparse
 import os
